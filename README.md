@@ -31,7 +31,7 @@ cd ..
 
 ## Uso
 
-### Ingestão de documentos
+### 1. Ingestão de documentos
 
 ```bash
 python scripts/ingest_regulamento.py
@@ -42,16 +42,38 @@ O script irá:
 - Criar embeddings usando o modelo `BAAI/bge-small-en-v1.5`
 - Salvar no banco vetorial em `data/regulamento.db`
 
+### 2. Uso do RAG (Query)
+
+```python
+from pdf_rag_sdk_python import RAGEngine
+
+# Inicializar
+engine = RAGEngine(
+    db_path="data/regulamento.db",
+    embedding_model="BAAI/bge-small-en-v1.5"
+)
+
+# Busca semântica
+results = engine.search("como funciona o cashback?", top_k=5)
+for r in results:
+    print(f"Score: {r.score:.2f} - {r.content[:100]}...")
+
+# Contexto para LLM
+context = engine.get_context("pergunta do usuário", top_k=3)
+```
+
 ## Estrutura
 
 ```
 backend-quiz-rag/
 ├── pdf_rag_sdk_python/     # SDK (submódulo Git)
+│   ├── ingest.py           # Engine de ingestão
+│   └── query.py            # Engine de busca RAG
 ├── scripts/
-│   └── ingest_regulamento.py
+│   └── ingest_regulamento.py  # Script de ingestão
 ├── ingest/
 │   └── rendaextra-todos-regulamentos.pdf
 ├── data/
-│   └── regulamento.db
+│   └── regulamento.db      # Banco vetorial SQLite
 └── .gitmodules
 ```
