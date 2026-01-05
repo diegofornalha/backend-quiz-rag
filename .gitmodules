@@ -1,4 +1,4 @@
 [submodule "pdf_rag_sdk_python"]
 	path = pdf_rag_sdk_python
-	url = https://github.com/diegofornalha/pdf_rag_sdk_python.git
+	url = https://github.com/diegofornalha/pdf_rag_sdk_python
 	branch = main
